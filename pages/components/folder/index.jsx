@@ -8,7 +8,7 @@ export default function Folder({ onClick, name, className }) {
     <div className={`${styles.directory} ${className}`} onClick={onClick}>
       <Image src={'/folder.ico'} layout={'fixed'} priority height={'64'} width={'64'} />
       <p>{name}</p>
-      {name.charAt(0) === '_' ? (
+      {name ? name.charAt(0) === '_' ? (
         <FontAwesomeIcon className={styles.locked} icon={faLock} />
       ) : null}
     </div>

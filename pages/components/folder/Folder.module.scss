@@ -1,0 +1,20 @@
+@import '../../../styles/utils';
+.directory {
+  margin: $margin-base;
+  position: relative;
+  width: 100px;
+  height: 100px;
+  .locked {
+    position: absolute;
+    top: calc(64px - 35%);
+    left: calc(64px - 30%);
+    width: 25%;
+    height: 25%;
+  }
+  p {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

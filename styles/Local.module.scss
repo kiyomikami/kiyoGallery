@@ -1,0 +1,104 @@
+@import '../styles/utils';
+
+.container {
+  position: relative;
+  top: 0;
+  height: calc(100% - $header-height);
+
+  input[type='text'] {
+    border: 1px solid #fff;
+    border-radius: 5px;
+    position: absolute;
+    top: -40px;
+    right: #{$margin-base + $padding-base};
+    padding: $padding-base;
+    color: #fff;
+  }
+
+  .filesContainer {
+    overflow-y: scroll;
+    height: 100%;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+
+    padding: #{2 * $padding-base};
+  }
+
+  .image {
+    margin: $margin-base;
+    position: relative;
+    width: 100px;
+    height: 100px;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  .fullscreen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #888a;
+    display: flex;
+    .fullscreenImage {
+      position: relative;
+      top: $margin-base;
+      left: $margin-base;
+      width: calc(100% - #{2 * $margin-base});
+      height: calc(100% - #{2 * $margin-base});
+    }
+    .fullscreenClose {
+      cursor: pointer;
+      position: absolute;
+      top: $margin-base;
+      right: $margin-base;
+      width: 50px;
+      height: 50px;
+    }
+    .fullscreenNavPrev,
+    .fullscreenNavNext {
+      cursor: pointer;
+      position: absolute;
+      top: calc(50% - $margin-base);
+      width: 40px;
+      height: 40px;
+    }
+    .fullscreenClose,
+    .fullscreenNavPrev,
+    .fullscreenNavNext {
+      &:hover {
+        transition: all 0.2s ease;
+        color: darken(#fff, 20%);
+        filter: drop-shadow(0 0 5px #fff);
+      }
+    }
+    .fullscreenNavNext {
+      right: $margin-base;
+    }
+    .fullscreenNavPrev {
+      left: $margin-base;
+    }
+
+    .directory {
+      margin: auto;
+      background-color: $primary-color;
+      padding: #{3 * $padding-base};
+      width: fit-content;
+      height: fit-content;
+      max-width: calc(100% - #{2 * $margin-base});
+      border-radius: 10px;
+      p {
+        font-size: 42px;
+        font-weight: 700;
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+  }
+}

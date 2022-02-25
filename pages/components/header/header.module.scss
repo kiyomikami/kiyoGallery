@@ -1,0 +1,113 @@
+@import '../../../styles/utils';
+$burger-size: 50px;
+$burger-padding: 10px;
+$slice-size: 4px;
+$slice-width: 30px;
+$burger-color: $light-gray;
+.header {
+  position: relative;
+  background-color: $dark-gray;
+  height: $header-height;
+  width: 100vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 70px;
+  padding-right: 10px;
+  h1 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: $white;
+    font-family: 'Righteous', cursive;
+  }
+  nav {
+    position: fixed;
+    top: 0;
+    padding-top: 50px;
+    height: 100vh;
+    width: 150px;
+    background-color: $light-gray;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    left: -150px;
+    transition: all 0.3s ease-in-out;
+    z-index: 1;
+    a {
+      position: relative;
+      font-family: 'Roboto', sans-serif;
+      font-size: 1.2em;
+      font-weight: 500;
+      padding: 10px 20px;
+      margin: 5px 20px;
+      width: calc(100% - 40px);
+    }
+    a:hover {
+      color: $white;
+    }
+    .active {
+      color: $black;
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 10%;
+        width: 60%;
+        height: 2px;
+        background-color: $white;
+      }
+    }
+  }
+  .open {
+    left: 0px;
+  }
+}
+// burger
+.burger {
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: $burger-padding;
+  cursor: pointer;
+  width: $burger-size;
+  height: $burger-size;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  span {
+    display: block;
+    width: $slice-width;
+    height: $slice-size;
+    background-color: $burger-color;
+    margin: 0px 0;
+    transition: all 0.3s ease-in-out;
+    border-radius: 3px;
+    &:nth-child(1) {
+      transform-origin: 0 100%;
+    }
+    &:nth-child(3) {
+      transform-origin: 0 0%;
+    }
+  }
+}
+.burger.open {
+  & > * {
+    background-color: $white;
+  }
+  span:nth-child(1) {
+    transform: translate(0, -3px) rotate(45deg);
+  }
+  span:nth-child(2) {
+    opacity: 0;
+  }
+  span:nth-child(3) {
+    transform: translate(0, 3px) rotate(-45deg);
+  }
+}
+
+.headerContent {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}

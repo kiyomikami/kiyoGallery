@@ -25,7 +25,7 @@ export default function Header({ children, className }) {
     })
 
   return (
-    <header className={[styles.header, className].join(' ')}>
+    <header className={[styles.header].join(' ')}>
       <div
         className={[styles.burger, open ? styles.open : null].join(' ')}
         onClick={() => setOpen(!open)}
@@ -39,7 +39,7 @@ export default function Header({ children, className }) {
         <NavElement href="/local" name="Local" />
         <NavElement href="/rule34" name="Rule34" />
       </nav>
-      <div className={styles.headerContent}>{children}</div>
+      <div className={[styles.headerContent, className].join(' ')}>{children}</div>
     </header>
   )
 }

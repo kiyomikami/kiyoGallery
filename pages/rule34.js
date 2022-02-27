@@ -2,6 +2,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import Layout from './components/layout'
 import Header from './components/header'
+import Fullscreen from './components/fullscreen'
 import { useEffect, useState } from 'react'
 import styles from '../styles/Rule.module.scss'
 import {
@@ -19,21 +20,21 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
  * - add tags //  https://api.rule34.xxx/index.php?page=dapi&s=tag&q=index
  */
 
-function LocalHeader() {}
-
-export default function Home({}) {
+export default function Rule({}) {
   const [files, setFiles] = useState([])
-  const [filesLength, setFilesLength] = useState(100)
+  const [filesLength, setFilesLength] = useState(0)
   const [selected, setSelected] = useState(0)
   const [query, setQuery] = useState('clothed_female++long_hair+clothed+pantyhose+')
   const [fullScreen, setFullScreen] = useState(false)
-  const [fsZoom, setFsZoom] = useState(1)
   const [pageId, setPageId] = useState(0)
   const [queryError, setQueryError] = useState(false)
+  const [predictions, setPredictions] = useState([])
+  const [tags, setTags] = useState([])
+  const [hidePredicts, setHidePredicts] = useState(true)
 
-  const getData = async (event) => {
+  async function getData() {
     fetch(
-      `https://api.rule34.xxx/index.php?page=dapi&s=post&q=index&json=1&limit=100&tags=${query}&pid=${pageId}`
+      `https://api.rule34.xxx/index.php?page=dapi&s=post&q=index&json=1&limit=100&tags=${queryGenerator()}&pid=${pageId}`
     )
       .catch((err) => console.log(err))
       .then((res) => res.json())
@@ -53,50 +54,97 @@ export default function Home({}) {
       })
   }
 
-  function fsPrev() {
-    console.log('prev', selected, selected - 1, filesLength)
-    if (selected - 1 < 0) {
-      setSelected(filesLength - 1)
-      console.log('max')
-    } else {
-      setSelected(selected - 1)
-    }
-    setFsZoom(1)
-  }
-  async function fsNext() {
-    console.log('next', selected, selected + 1, filesLength)
-    if (selected + 1 >= filesLength) {
-      setSelected(0)
-      console.log('max')
-    } else {
-      setSelected(selected + 1)
-    }
-    setFsZoom(1)
+  async function predict(query) {
+    fetch(`/api/predict?query=${query}`)
+      .catch((err) => console.log(err))
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res)
+        setPredictions([...res])
+      })
+      .catch((err) => {
+        setPredictions([])
+        console.log(err)
+      })
   }
 
-  const keyDownFunction = (e) => {
+  function hidePredictions() {
+    setHidePredicts(true)
+  }
+  function showPredictions() {
+    setHidePredicts(false)
+  }
+
+  function queryGenerator() {
+    // score:>=10 ( pokomon ~ ben_10 )
+
+    const queryString = `sort:score:desc ${tags
+      .map((t) => `${t.exclude ? '-' : ''}${t.value}`)
+      .join('+')}`
+    console.log(queryString)
+    return queryString
+  }
+
+  do /* tags functions */ {
+    function addTag(tag) {
+      setTags([...tags, tag])
+    }
+    function clearTags() {
+      setTags([])
+    }
+    function removeTag(tagValue) {
+      setTags(tags.filter((t) => t.value !== tagValue))
+    }
+    function excludeTag(tagValue, exclude) {
+      setTags(
+        tags.map((t) => {
+          if (t.value === tagValue) {
+            t.exclude = exclude
+            return t
+          } else return t
+        })
+      )
+    }
+  } while (false)
+
+  do /* fullscreen functions */ {
+    function fsPrev() {
+      if (selected - 1 < 0) setSelected(filesLength - 1)
+      else setSelected(selected - 1)
+    }
+    function fsNext() {
+      if (selected + 1 >= filesLength) setSelected(0)
+      else setSelected(selected + 1)
+    }
+    function fsClose() {
+      setFullScreen(false)
+    }
+  } while (false)
+
+  function keyDownFunction(e) {
     switch (e.key) {
       case 'Escape':
-        setFullScreen(false)
-        setFsZoom(1)
+        if (fullScreen) {
+          setFullScreen(false)
+        }
         break
       case 'ArrowLeft':
       case 'q':
-        fsPrev()
+        if (fullScreen) fsPrev()
         break
       case 'ArrowRight':
       case 'd':
-        fsNext()
+        if (fullScreen) fsNext()
         break
       case 'Enter':
-        getData()
+        if (!fullScreen) getData()
         break
       case 'AltGraph':
         // panic button
         break
 
       default:
-        console.log(e.key)
+        //console.log(e.key)
         break
     }
   }
@@ -108,16 +156,50 @@ export default function Home({}) {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        {queryError ? <div className={styles.qError}></div> : null}
-        <input
-          type="text"
-          placeholder="Query"
-          onChange={(e) => {
-            setQuery(e.target.value)
-          }}
-          value={query}
-        />
+      <Header className={styles.header}>
+        {
+          <ul className={styles.tags}>
+            {tags.map((tag, i) => (
+              <li key={i} className={tag.exclude ? styles.exclude : ''}>
+                <i className={styles.remove} onClick={() => removeTag(tag.value)}>
+                  x
+                </i>
+                <i
+                  className={styles.exclude}
+                  onClick={() => excludeTag(tag.value, !tag.exclude)}
+                >
+                  {tag.exclude ? '+' : '-'}
+                </i>
+                {tag.value}
+              </li>
+            ))}
+          </ul>
+        }
+        <div className={styles.search}>
+          {queryError ? <div className={styles.qError}></div> : null}
+          <input
+            type="text"
+            placeholder="Query"
+            onChange={(e) => {
+              setQuery(e.target.value)
+              predict(e.target.value)
+            }}
+            onBlur={hidePredictions}
+            onFocus={showPredictions}
+            value={query}
+          />
+          <div className={[styles.prediction, hidePredicts ? styles.hide : ''].join(' ')}>
+            {predictions.map((prediction, i) => (
+              <div
+                key={i}
+                className={styles.predictionItem}
+                onClick={() => addTag(prediction)}
+              >
+                {prediction.label}
+              </div>
+            ))}
+          </div>
+        </div>
         <button
           className={styles.minus}
           onClick={() => setPageId(pageId === 0 ? 0 : pageId - 1)}
@@ -128,10 +210,10 @@ export default function Home({}) {
         <button className={styles.plus} onClick={() => setPageId(pageId + 1)}>
           +
         </button>
-        <button className={styles.searchbtn} onClick={getData}>
+        <button className={styles.searchbtn} onClick={(e) => getData()}>
           Search
         </button>
-      </div>
+      </Header>
       <div className={styles.filesContainer}>
         {files ? (
           files.map((item, index) => (
@@ -157,51 +239,15 @@ export default function Home({}) {
         )}
       </div>
       {fullScreen ? (
-        <div className={styles.fullscreen} onClick={(e) => e.preventDefault()}>
-          <div
-            className={styles.fullscreenImage}
-            style={{ transform: `scale(${fsZoom})` }}
-            onClick={(e) => {
-              e.preventDefault()
-              fsZoom === 1 ? setFsZoom(2) : setFsZoom(1)
-            }}
-          >
-            <div className={styles.fsHeader}>{/**/}</div>
-            <Image
-              // loader={imageLoader}
-              src={files[selected].sample_url || files[0].sample_url}
-              layout="fill"
-              objectFit="contain"
-              priority={true}
-            />
-          </div>
-          <FontAwesomeIcon
-            icon={faXmark}
-            className={styles.fullscreenClose}
-            onClick={() => {
-              setFsZoom(1)
-              setFullScreen(false)
-            }}
-          />
-          <FontAwesomeIcon
-            icon={faAngleLeft}
-            className={styles.fullscreenNavPrev}
-            onClick={() => fsPrev()}
-          />
-          <FontAwesomeIcon
-            icon={faAngleRight}
-            className={styles.fullscreenNavNext}
-            onClick={() => fsNext()}
-          />
-        </div>
+        <Fullscreen
+          src={files[selected].sample_url || files[0].sample_url}
+          prev={fsPrev}
+          next={fsNext}
+          close={fsClose}
+        />
       ) : null}
     </div>
   )
 }
 
-// Home.getLayout = (page) => (
-//   <Layout>
-//     <Header>{LocalHeader}</Header>
-//     {page}
-//   </Layout>
-// )
+Rule.getLayout = (page) => <Layout>{page}</Layout>

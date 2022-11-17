@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import styles from '../styles/pages/Index.module.scss'
-import Header from './components/Header'
+import Header from './_components/Header'
 
 export default function Home() {
   return (

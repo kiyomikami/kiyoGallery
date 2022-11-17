@@ -3,9 +3,9 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import styles from '../styles/pages/local.module.scss'
-import Header from './components/Header'
-import Fullscreen from './components/fullscreen'
-import Folder from './components/Folder'
+import Header from './_components/Header'
+import Fullscreen from './_components/fullscreen'
+import Folder from './_components/Folder'
 
 const imageExtensions = [
   'jpg',

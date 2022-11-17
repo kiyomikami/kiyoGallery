@@ -1,6 +1,6 @@
 import styles from '../../styles/components/fullscreen.module.scss'
 import Image from 'next/image'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import {
   faXmark,
   faAngleLeft,

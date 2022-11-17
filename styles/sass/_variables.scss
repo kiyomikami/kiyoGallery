@@ -1,0 +1,35 @@
+//###// COLOR //###//
+/* B&W */
+$black: #000;
+$white: #fff;
+$light-gray: #e7e7e7;
+$gray: #797474;
+$dark-gray: #222;
+
+$red: #f94144;
+$orange: #ed6454;
+$yellow: #f9c74f;
+$green: #68d9a4;
+$blue: #3282f7;
+
+$dark-red: #901c1c;
+$dark-blue: #1c1c9c;
+/* theme color */
+$primary-color: $red;
+$secondary-color: $blue;
+$ternary-color: $green;
+
+$background-color: $white;
+$text-color: $black;
+
+//###// SIZE //###//
+
+$mobile-breakpoint: 460px;
+$large-breakpoint: 1320px;
+$margin: 20px;
+$padding: 10px;
+$border-radius: 5px;
+
+$header-height: 50px;
+$margin-base: 10px;
+$padding-base: 5px;

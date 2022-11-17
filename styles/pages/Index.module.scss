@@ -1,0 +1,7 @@
+@import '../sass';
+
+.container {
+  position: relative;
+  top: 0;
+  height: calc(100% - $header-height);
+}

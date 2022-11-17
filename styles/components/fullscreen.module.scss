@@ -1,0 +1,105 @@
+@import '../sass';
+
+.fullscreen {
+  position: absolute;
+  top: 0px;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(136, 136, 136, 0.815);
+  display: flex;
+  .fullscreenImage {
+    position: relative;
+    top: $margin-base;
+    left: $margin-base;
+    width: calc(100% - #{2 * $margin-base});
+    height: calc(100% - #{2 * $margin-base});
+  }
+  .fullscreenVideo {
+    background-color: black;
+    width: calc(100% - #{$margin-base});
+    height: calc(100% - #{$margin-base});
+    left: $margin-base;
+    top: $margin-base;
+  }
+  .fullscreenClose {
+    cursor: pointer;
+    position: absolute;
+    top: $margin-base;
+    right: $margin-base;
+    width: 50px;
+    height: 50px;
+  }
+  .fullscreenNavPrev,
+  .fullscreenNavNext {
+    cursor: pointer;
+    position: absolute;
+    top: calc(50% - $margin-base);
+    width: 40px;
+    height: 40px;
+  }
+  .fullscreenClose,
+  .fullscreenNavPrev,
+  .fullscreenNavNext {
+    &:hover {
+      transition: all 0.2s ease;
+      color: darken(#fff, 20%);
+      filter: drop-shadow(0 0 5px #fff);
+    }
+  }
+  .fullscreenNavNext {
+    right: $margin-base;
+  }
+  .fullscreenNavPrev {
+    left: $margin-base;
+  }
+  .fsHeader {
+    position: absolute;
+    top: -$margin-base;
+    left: -$margin-base;
+    border-bottom-right-radius: 10px;
+    width: fit-content;
+    height: 60px;
+    background-color: $primary-color;
+    z-index: 1;
+    @include flex(row);
+    & > *:first-child {
+      margin-left: calc($margin-base + 50px);
+    }
+    & > *:last-child {
+      margin-right: $margin-base;
+    }
+    .fsChecked {
+      position: relative;
+      &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 99%;
+        height: 99%;
+        background-color: $secondary-color;
+        border-radius: 5px;
+        opacity: 1;
+        transition: all 0.2s ease;
+      }
+    }
+  }
+  .directory {
+    margin: auto;
+    background-color: $primary-color;
+    padding: #{3 * $padding-base};
+    width: fit-content;
+    height: fit-content;
+    max-width: calc(100% - #{2 * $margin-base});
+    border-radius: 10px;
+    p {
+      font-size: 42px;
+      font-weight: 700;
+      width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+}

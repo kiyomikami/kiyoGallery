@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import styles from '../styles/pages/local.module.scss'
 import Header from './_components/Header'
-import Fullscreen from './_components/fullscreen'
+import Fullscreen from './_components/Fullscreen'
 import Folder from './_components/Folder'
 
 const imageExtensions = [
